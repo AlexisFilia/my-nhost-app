@@ -1,9 +1,18 @@
-SET check_function_bodies = false;
-CREATE TABLE public.test (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    "userId" uuid NOT NULL
+-- CreateTable
+CREATE TABLE ProjectTest (
+    id TEXT NOT NULL,
+    identifier TEXT NOT NULL DEFAULT '',
+    name TEXT NOT NULL DEFAULT '',
+    status INTEGER,
+    dateReception TIMESTAMP(3),
+    dateDelivery TIMESTAMP(3),
+    typeEmergency INTEGER,
+    altitude INTEGER,
+    createdAt TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT Project_pkey PRIMARY KEY (id)
 );
-ALTER TABLE ONLY public.test
-    ADD CONSTRAINT test_pkey PRIMARY KEY (id);
-ALTER TABLE ONLY public.test
-    ADD CONSTRAINT "test_userId_fkey" FOREIGN KEY ("userId") REFERENCES auth.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+-- CreateIndex
+CREATE UNIQUE INDEX Project_identifier_key ON ProjectTest(identifier);
