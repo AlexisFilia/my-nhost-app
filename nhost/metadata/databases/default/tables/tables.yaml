@@ -6,6 +6,7 @@
 - "!include auth_user_providers.yaml"
 - "!include auth_user_roles.yaml"
 - "!include auth_users.yaml"
-- "!include public_test.yaml"
+- "!include public_persons.yaml"
+- "!include public_projecttest.yaml"
 - "!include storage_buckets.yaml"
 - "!include storage_files.yaml"
