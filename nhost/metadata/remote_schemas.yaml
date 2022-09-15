@@ -1,6 +1,6 @@
 - name: Persons
   definition:
-    url: "https://keystone-app-test-persons.herokuapp.com/api/graphql"
+    url: https://keystone-app-test-persons.herokuapp.com/api/graphql
     timeout_seconds: 60
     customization:
       root_fields_namespace: persons
@@ -8,45 +8,45 @@
         mapping: {}
         prefix: persons_
   remote_relationships:
-    - relationships:
-        - name: OwnedProjects
-          definition:
-            to_remote_schema:
-              lhs_fields:
-                - id
-              remote_field:
-                projects:
-                  arguments:
-                    where:
-                      ownerId:
-                        equals: $id
-              remote_schema: Projects
-        - name: ProjectMemberFor
-          definition:
-            to_remote_schema:
-              lhs_fields:
-                - id
-              remote_field:
-                projectPeople:
-                  arguments:
-                    where:
-                      personId:
-                        equals: $id
-              remote_schema: Projects
-        - name: user
-          definition:
-            to_source:
-              source: default
-              relationship_type: object
-              field_mapping:
-                userId: id
-              table:
-                name: users
-                schema: auth
-      type_name: Person
+  - relationships:
+    - definition:
+        to_remote_schema:
+          lhs_fields:
+          - id
+          remote_field:
+            projects:
+              arguments:
+                where:
+                  ownerId:
+                    equals: $id
+          remote_schema: Projects
+      name: OwnedProjects
+    - definition:
+        to_remote_schema:
+          lhs_fields:
+          - id
+          remote_field:
+            projectPeople:
+              arguments:
+                where:
+                  personId:
+                    equals: $id
+          remote_schema: Projects
+      name: ProjectMemberFor
+    - definition:
+        to_source:
+          field_mapping:
+            userId: id
+          relationship_type: object
+          source: default
+          table:
+            name: users
+            schema: auth
+      name: user
+    type_name: Person
 - name: Projects
   definition:
-    url: "https://keystone-app-test-projects.herokuapp.com/api/graphql"
+    url: https://keystone-app-test-projects.herokuapp.com/api/graphql
     timeout_seconds: 60
     customization:
       root_fields_namespace: projects
@@ -54,29 +54,29 @@
         mapping: {}
         prefix: projects_
   remote_relationships:
-    - relationships:
-        - name: Owner
-          definition:
-            to_remote_schema:
-              lhs_fields:
-                - ownerId
-              remote_field:
-                person:
-                  arguments:
-                    where:
-                      id: $ownerId
-              remote_schema: Persons
-      type_name: Project
-    - relationships:
-        - name: Persons
-          definition:
-            to_remote_schema:
-              lhs_fields:
-                - personId
-              remote_field:
-                person:
-                  arguments:
-                    where:
-                      id: $personId
-              remote_schema: Persons
-      type_name: ProjectPerson
+  - relationships:
+    - definition:
+        to_remote_schema:
+          lhs_fields:
+          - ownerId
+          remote_field:
+            person:
+              arguments:
+                where:
+                  id: $ownerId
+          remote_schema: Persons
+      name: Owner
+    type_name: Project
+  - relationships:
+    - definition:
+        to_remote_schema:
+          lhs_fields:
+          - personId
+          remote_field:
+            person:
+              arguments:
+                where:
+                  id: $personId
+          remote_schema: Persons
+      name: Persons
+    type_name: ProjectPerson
