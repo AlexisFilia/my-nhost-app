@@ -1,0 +1,82 @@
+- name: Persons
+  definition:
+    url: "https://keystone-app-test-persons.herokuapp.com/api/graphql"
+    timeout_seconds: 60
+    customization:
+      root_fields_namespace: persons
+      type_names:
+        mapping: {}
+        prefix: persons_
+  remote_relationships:
+    - relationships:
+        - name: OwnedProjects
+          definition:
+            to_remote_schema:
+              lhs_fields:
+                - id
+              remote_field:
+                projects:
+                  arguments:
+                    where:
+                      ownerId:
+                        equals: $id
+              remote_schema: Projects
+        - name: ProjectMemberFor
+          definition:
+            to_remote_schema:
+              lhs_fields:
+                - id
+              remote_field:
+                projectPeople:
+                  arguments:
+                    where:
+                      personId:
+                        equals: $id
+              remote_schema: Projects
+        - name: user
+          definition:
+            to_source:
+              source: default
+              relationship_type: object
+              field_mapping:
+                userId: id
+              table:
+                name: users
+                schema: auth
+      type_name: Person
+- name: Projects
+  definition:
+    url: "https://keystone-app-test-projects.herokuapp.com/api/graphql"
+    timeout_seconds: 60
+    customization:
+      root_fields_namespace: projects
+      type_names:
+        mapping: {}
+        prefix: projects_
+  remote_relationships:
+    - relationships:
+        - name: Owner
+          definition:
+            to_remote_schema:
+              lhs_fields:
+                - ownerId
+              remote_field:
+                person:
+                  arguments:
+                    where:
+                      id: $ownerId
+              remote_schema: Persons
+      type_name: Project
+    - relationships:
+        - name: Persons
+          definition:
+            to_remote_schema:
+              lhs_fields:
+                - personId
+              remote_field:
+                person:
+                  arguments:
+                    where:
+                      id: $personId
+              remote_schema: Persons
+      type_name: ProjectPerson
